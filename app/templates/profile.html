@@ -1,0 +1,23 @@
+<span> Hi {{ current_user.first_name }} {{ current_user.last_name }}!</span>
+
+<button id="deleteButton">DELETE ACCOUNT</button>
+
+<script>
+document.getElementById('deleteButton').addEventListener('click', function() {
+    fetch('/auth/delete-user', {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+</script>
+
+
+<!-- This section contains JavaScript code that is used for a button. Instead of using a form, this JavaScript code handles the button functionality. -->
+<!-- The JavaScript code listens for a click event on the button with the id deleteButton. When the button is clicked, the code sends a DELETE request to the /auth/delete-user route. Refered to this https://harrycresswell.com/writing/practical-javascript-click-to-delete/ -->

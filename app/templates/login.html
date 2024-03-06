@@ -1,0 +1,12 @@
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" method="POST">
+      <input type="email" name="email_address" placeholder="email address"/>
+      <input type="password" name= "password" placeholder="password"/>
+      <input type="submit" value="Log in"/>
+      <input type="checkbox" name="remember" id="remember">
+      <label for="remember">Remember me?</label>
+    </form>
+    <p class="message">Not registered? <a href="{{ url_for('auth.sign_up') }}">Create an account</a></p>
+  </div>
+</div>
