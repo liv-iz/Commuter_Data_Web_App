@@ -15,3 +15,14 @@ def get_profile():
         logging.error(f'An error occurred while accessing the profile: {e}')
         flash('An error occurred while accessing the profile. Please try again.')
         return redirect(url_for('general.get_profile'))  # Try to go to profile page again if error occurs (TODO: maybe redirect to index page instead)
+
+
+@general.get('/')
+def get_index():
+    try:
+        logging.info('GET request received at /')
+        return render_template('index.html')
+    except Exception as e:
+        logging.error(f'An error occurred while accessing the index page: {e}')
+        flash('An error occurred while accessing the index page. Please try again.')
+        return redirect(url_for('general.get_index'))
