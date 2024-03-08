@@ -137,7 +137,7 @@ def delete_user():
 
         logout_user()
         logging.info(f'User {user_id} logged out after successfully deleting account')
-        return redirect(url_for('auth.login'))  # TODO: In CW2, change this to redirect to index page and flash message saying user deleted successfully
+        return redirect(url_for('general.get_index'))
 
     except exc.SQLAlchemyError as e:
         db.session.rollback()

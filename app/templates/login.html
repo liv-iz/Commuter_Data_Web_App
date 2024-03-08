@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <div class="login-page">
   <div class="form">
     <form class="login-form" method="POST">
@@ -10,3 +13,19 @@
     <p class="message">Not registered? <a href="{{ url_for('auth.sign_up') }}">Create an account</a></p>
   </div>
 </div>
+
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+
+    <div class="d-flex">
+        <h1>{% block title %} Index {% endblock %}</h1>
+        <h1>Hello World!</h1>
+        <h2>Welcome to FlaskApp!</h2>
+        <h3>{{ utc_dt }}</h3>
+    </div>
+{% endblock %}  

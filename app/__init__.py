@@ -43,7 +43,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(maps_blueprint, url_prefix='/api')
-    app.register_blueprint(general_blueprint, url_prefix='/app')
+    app.register_blueprint(general_blueprint, url_prefix='/')
     if os.environ.get('FLASK_ENV') != 'production':
         app.register_blueprint(site_map_blueprint, url_prefix='/site-map')
 

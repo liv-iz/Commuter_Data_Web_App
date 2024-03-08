@@ -92,7 +92,7 @@ class TravelDistance(db.Model):
 class Map(db.Model):
     __tablename__ = 'map'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
     user: Mapped['User'] = relationship(back_populates='maps')
     name: Mapped[str] = mapped_column(String(32), default='Untitled Map')
     data: Mapped[str] = mapped_column(String(64000))
