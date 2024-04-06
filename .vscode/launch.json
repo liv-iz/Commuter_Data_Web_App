@@ -5,14 +5,32 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Flask",
-            "type": "python",
+            "name": "Flask Debug",
+            "type": "debugpy",
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "__init__.py",
+                "FLASK_APP": "app",
                 "FLASK_DEBUG": "1",
-                "SECRET_KEY": "liv_iz_cool"
+                "SECRET_KEY": "YCQVwqtptzsFGcPC2zl3Pg"
+            },
+            "args": [
+                "run",
+                "--debug"
+            ],
+            "jinja": true,
+            "justMyCode": true,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Flask",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "app",
+                "FLASK_DEBUG": "1",
+                "SECRET_KEY": "YCQVwqtptzsFGcPC2zl3Pg"
             },
             "args": [
                 "run",
@@ -21,7 +39,8 @@
             ],
             "jinja": true,
             "justMyCode": true,
-            "cwd": "${workspaceFolder}/app"
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
+ 
