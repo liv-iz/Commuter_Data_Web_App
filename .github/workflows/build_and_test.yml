@@ -22,6 +22,11 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'poetry'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-traces
+          path: test-results/
       - name: Install the project dependencies
         run: poetry install
       - name: Lint with flake8
@@ -30,5 +35,7 @@ jobs:
           poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings.
           poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=256 --statistics
+      - name: Ensure browsers are installed
+        run: poetry run playwright install --with-deps
       - name: Run tests
         run: poetry run pytest -v
