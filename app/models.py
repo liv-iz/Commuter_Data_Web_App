@@ -13,40 +13,35 @@ def get_utc_now():
     return datetime.now(UTC)
 
 
-class Area(db.Model):
-    __tablename__ = 'area'
-    area_id: Mapped[str] = mapped_column(String(16), primary_key=True)
-    local_authority_name: Mapped[str] = mapped_column(String(32))
-    local_authority_code: Mapped[str] = mapped_column(String(16))
-    lsoa_code: Mapped[str] = mapped_column(String(16))
+class LocalAuthority(db.Model):
+    __tablename__ = 'local_authority'
+    code: Mapped[str] = mapped_column(String(16), primary_key=True)
+    name: Mapped[str] = mapped_column(String(32))
     geometry: Mapped[str] = mapped_column(String(255))
 
     def __repr__(self) -> str:
-        return f'Area(area_id={self.area_id}, local_authority_name={self.local_authority_name}, local_authority_code={self.local_authority_code}, lsoa_code={self.lsoa_code}, geometry={self.geometry})'
+        return f'LocalAuthority(code={self.code}, name={self.name}, geometry={self.geometry})'
 
 
 class Hours(db.Model):
     __tablename__ = 'hours'
     census_year: Mapped[int] = mapped_column(Integer, primary_key=True)
     lsoa_code: Mapped[str] = mapped_column(String(16), primary_key=True)
-    local_authority_name: Mapped[str] = mapped_column(String(32))
     local_authority_code: Mapped[str] = mapped_column(String(16))
     employed_residents: Mapped[int]
     less_than_15: Mapped[int]
     between_16_and_30: Mapped[int]
     between_31_and_48: Mapped[int]
     more_than_48: Mapped[int]
-    geometry: Mapped[str] = mapped_column(String(255))
 
     def __repr__(self) -> str:
-        return f'Hours(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_name={self.local_authority_name}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents}, geometry={self.geometry})'
+        return f'Hours(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents})'
 
 
 class TravelMethod(db.Model):
     __tablename__ = 'travel_method'
     census_year: Mapped[int] = mapped_column(Integer, primary_key=True)
     lsoa_code: Mapped[str] = mapped_column(String(16), primary_key=True)
-    local_authority_name: Mapped[str] = mapped_column(String(32))
     local_authority_code: Mapped[str] = mapped_column(String(16))
     employed_residents: Mapped[int]
     work_from_home: Mapped[int]
@@ -60,17 +55,15 @@ class TravelMethod(db.Model):
     bicycle: Mapped[int]
     walk: Mapped[int]
     other: Mapped[int]
-    geometry: Mapped[str] = mapped_column(String(255))
 
     def __repr__(self) -> str:
-        return f'TravelMethod(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_name={self.local_authority_name}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents}, geometry={self.geometry})'
+        return f'TravelMethod(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents})'
 
 
 class TravelDistance(db.Model):
     __tablename__ = 'travel_distance'
     census_year: Mapped[int] = mapped_column(Integer, primary_key=True)
     lsoa_code: Mapped[str] = mapped_column(String(16), primary_key=True)
-    local_authority_name: Mapped[str] = mapped_column(String(32))
     local_authority_code: Mapped[str] = mapped_column(String(16))
     employed_residents: Mapped[int]
     less_than_2: Mapped[int]
@@ -83,10 +76,9 @@ class TravelDistance(db.Model):
     more_than_60: Mapped[int]
     work_from_home: Mapped[int]
     other: Mapped[int]
-    geometry: Mapped[str] = mapped_column(String(255))
 
     def __repr__(self) -> str:
-        return f'TravelDistance(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_name={self.local_authority_name}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents}, geometry={self.geometry})'
+        return f'TravelDistance(census_year={self.census_year}, lsoa_code={self.lsoa_code}, local_authority_code={self.local_authority_code}, employed_residents={self.employed_residents})'
 
 
 class Map(db.Model):
@@ -95,11 +87,17 @@ class Map(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
     user: Mapped['User'] = relationship(back_populates='maps')
     name: Mapped[str] = mapped_column(String(32), default='Untitled Map')
-    data: Mapped[str] = mapped_column(String(64000))
+    data_source: Mapped[str] = mapped_column(String(64))
+    data_source_label: Mapped[str] = mapped_column(String(64))
+    attribute: Mapped[str] = mapped_column(String(64))
+    attribute_label: Mapped[str] = mapped_column(String(64))
+    year: Mapped[str] = mapped_column(String(5))
+    min_colour: Mapped[str] = mapped_column(String(16))
+    max_colour: Mapped[str] = mapped_column(String(16))
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=get_utc_now)
 
     def __repr__(self) -> str:
-        return f'Map(id={self.id}, user_id={self.user_id}, name={self.name}, data={self.data}, updated_at={self.updated_at})'
+        return f'Map(id={self.id}, user_id={self.user_id}, name={self.name}, updated_at={self.updated_at})'
 
 
 class User(UserMixin, db.Model):
