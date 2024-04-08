@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
 <html>
 
 <head>
-    <title>Page Not Found</title>
+    <title>{% block title %} Page Not Found {% endblock %}</title>
 </head>
 
 <body>
@@ -10,13 +12,14 @@
     <div style="display: flex; justify-content: space-around;">
         <div>
             <p>But here is Stevie the rabbit:</p>
-            <img src="static/error_images/stevie.jpg" alt="Stevie the rabbit" style="width: 400px; height: 300px;">
+            <img src="/static/error_images/stevie.jpg" alt="Stevie the rabbit" style="width: 400px; height: 300px;">
         </div>
         <div>
             <p>And this is Yoshi:</p>
-            <img src="static/error_images/yoshi.jpg" alt="Yoshi the cat" style="width: 400px; height: 300px;">
+            <img src="/static/error_images/yoshi.jpg" alt="Yoshi the cat" style="width: 400px; height: 300px;">
         </div>
     </div>
 </body>
 
 </html>
+{% endblock %}

@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
 <html>
 
 <head>
-    <title>Internal Server Error</title>
+    <title>{% block title %} Internal Server Error {% endblock %}</title>
 </head>
 
 <body>
@@ -10,13 +12,14 @@
     <div style="display: flex; justify-content: space-around;">
         <div>
             <p>So, instead, meet Bug:</p>
-            <img src="static/error_images/bug.jpg" alt="Bug the lizzard" style="width: 400px; height: 300px;">
+            <img src="/static/error_images/bug.jpg" alt="Bug the lizzard" style="width: 300px; height: 400px;">
         </div>
         <div>
             <p>And Squiggle the, very originally named, squirrel:</p>
-            <img src="static/error_images/squiggle.jpg" alt="Squiggle the squirrel" style="width: 400px; height: 300px;">
+            <img src="/static/error_images/squiggle.jpg" alt="Squiggle the squirrel" style="width: 300px; height: 400px;">
         </div>
     </div>
 </body>
 
 </html>
+{% endblock %}
