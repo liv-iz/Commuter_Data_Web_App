@@ -14,7 +14,7 @@ class DevConfig(Config):
 
 class ProdConfig(Config):
     Production = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///project.db'  # TODO: Update to prod URI for coursework 2?
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///project.db'
 
 
 class TestConfig(Config):

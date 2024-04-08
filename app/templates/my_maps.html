@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow-2-strong container-xl rounded-4">
+    <div class="card-body p-5">
+        <h3 class="mb-5">{% block title %} My Maps {% endblock %}</h3>
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3">
+                <div class="list-group">
+                    {% for map in maps %}
+                        <div class="d-flex my-1">
+                            <a class="list-group-item list-group-item-action list-group-item-light rounded-start" href="/dynamic_map?dataSource={{map.data_source}}&dataSourceLabel={{map.data_source_label}}&attribute={{map.attribute}}&attributeLabel={{map.attribute_label}}&year={{map.year}}&minColour={{map.min_colour}}&maxColour={{map.max_colour}}">{{ map.name }}</a>
+                            <button class="btn btn-danger d-inline rounded-end" onclick="deleteMap({{map.id}})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    {% else %}
+                        You have no saved maps
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function deleteMap(mapId) {
+        fetch(`/api/maps/${mapId}`, { method: 'DELETE' })
+            .then(() => window.location.reload())
+            .error(console.error);
+    }
+</script>
+
+{% endblock %}

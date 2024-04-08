@@ -3,89 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %} {% endblock %} - FlaskApp</title>
-    <link href="/static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH">
+    <link href="/static/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/fontawesome-6.5.1/css/all.css" rel="stylesheet" />
+    <script src="/static/jquery-3.5.1/jquery.min.js"></script>
+    <script src="/static/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <!-- Container wrapper -->
-    <div class="container-fluid">
-      <!-- Toggle button -->
-      <button
-        data-mdb-collapse-init
-        class="navbar-toggler"
-        type="button"
-        data-mdb-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-bars"></i>
+<nav class="navbar navbar-expand-sm navbar-light bg-info mb-3 border-bottom border-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand mt-2 mt-lg-0 text-white" href="/">
+      <img src="/static/nav_bar/logo.png" height="60" alt="Logo"/>FLASK APP</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a href="/" class="nav-link text-white">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="/dynamic_map" class="nav-link text-white">Create Map</a>
+        </li>
+        <li class="nav-item">
+          <a href="/my_maps" class="nav-link text-white">My Maps</a>
+        </li>
+        <li class="nav-item">
+          <a href="/data" class="nav-link text-white">Data</a>
+        </li>
+      </ul>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
       </button>
-
-      <!-- Navbar brand -->
-      <a class="navbar-brand mt-2 mt-lg-0" href="#">
-        <img
-          src="/static/nav_bar/logo.png"
-          height="60"
-          alt="Logo"
-        />
-      </a>
-
-      <!-- Collapsible wrapper -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        <!-- Left links -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Dashboard</a>
+      <ul class="nav navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+              {% if current_user.is_authenticated %}
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user" style="color: #ffffff;" alt="Profile Icon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a href="/profile" class="dropdown-item">Profile</a>
+                    <a href="/my_maps" class="dropdown-item">My Maps</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/auth/logout" class="dropdown-item">Logout</a>
+                </div>
+              {% else %}
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-user" style="color: #ffffff;" alt="Profile Icon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a href="/auth/login" class="dropdown-item">Login</a>
+                    <a href="/auth/signup" class="dropdown-item">Sign Up</a>
+                </div>
+              {% endif %}
+              </div>
           </li>
-        </ul>
-        <!-- Left links -->
-      </div>
-      <!-- Collapsible wrapper -->
-  
-      <!-- Right elements -->
-      <div class="d-flex align-items-center">
-        <!-- Avatar -->
-        <div class="dropdown">
-          <a
-            data-mdb-dropdown-init
-            class="dropdown-toggle d-flex align-items-center hidden-arrow"
-            href="#"
-            id="navbarDropdownMenuAvatar"
-            role="button"
-            aria-expanded="false"
-          >
-          <i class="fa-solid fa-user" style="color: #ffffff;" alt="Profile Icon"></i>
-          </a>
-          <ul
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="navbarDropdownMenuAvatar"
-          >
-            <li>
-              <a class="dropdown-item" href="#">Profile</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/auth/logout">Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!-- Right elements -->
+      </ul>
     </div>
-    <!-- Container wrapper -->
-  </nav>
-  <!-- Navbar -->
-<body>
-    <script src="/static/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"></script>
-    <nav>
-        <a href="#">FlaskApp</a>
-        <a href="#">About</a>
-    </nav>
-    <hr>
-    <div class="content">
-        {% block content %} {% endblock %}
-    </div>
+  </div>
+</nav>
+<!--End of Navbar-->
+<body class="bg-light">
+ <!-- Flash messages from FLASK docs with categories and jsquery to make them disappear after 5s -->
+<div class="container-fluid" id="flash-message">
+{% with messages = get_flashed_messages (category_filter=["success"]) %} {% if messages %}
+{% for message in messages %}
+  <div class="alert alert-success flash-message" role="alert">
+  {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages (category_filter=["warning"]) %} {% if messages %}
+{% for message in messages %}
+  <div class="alert alert-warning flash-message" role="alert">
+  {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+{% with messages = get_flashed_messages (category_filter=["error"]) %} {% if messages %}
+{% for message in messages %}
+  <div class="alert alert-danger flash-message" role="alert">
+  {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<script>window.setTimeout(function() {
+  $(".flash-message").fadeTo(500, 0).slideUp(500, function(){
+      $(this).remove(); 
+  });
+}, 3000);
+</script>
+<script async="false">$('.dropdown-toggle').dropdown()</script>
+</div>
+<div class="content">
+  {% block content %} {% endblock %}
+</div>
 </body>
 </html>

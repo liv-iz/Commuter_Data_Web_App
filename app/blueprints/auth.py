@@ -17,7 +17,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def handle_needs_login():
-    flash('You have to be logged in to access this page.')
+    flash('You have to be logged in to access this page.', 'warning')
     return redirect(url_for('auth.login', next=request.endpoint))
 
 
@@ -47,7 +47,7 @@ def sign_up():
             user: User | None = db.session.scalar(select(User).filter_by(email_address=email_address))
             if user:
                 logging.info(f'Account creation failed because an account with this email address: {email_address} already exists')
-                flash('An account with this email address already exists')
+                flash('An account with this email address already exists', 'warning')
                 return 'An account with this email address already exists', 400
 
             # Create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -70,7 +70,7 @@ def sign_up():
         except exc.SQLAlchemyError as e:
             db.session.rollback()
             logging.error(f'An error occurred while creating the account for user with {email_address} : {e}')
-            flash('An error occurred while creating your account. Please try again.')
+            flash('An error occurred while creating your account. Please try again.', 'error')
             return 'An error occurred while creating the account', 500
 
     logging.info('Signup GET request received')
@@ -92,7 +92,7 @@ def login():
         # Check if user actually exists and take password, hash it, and compare it to the hashed password in database using bcrypt
         user: User | None = db.session.scalar(select(User).filter_by(email_address=email_address))
         if not user or not bcrypt.check_password_hash(user.password_hash, str(password)):
-            flash('Email or password is incorrect')
+            flash('Email or password is incorrect', 'warning')
             # If user doesn't exist or password is wrong, reload the page
             return redirect(url_for('auth.login'), flash_message=True)
 
@@ -113,15 +113,16 @@ def logout():
     try:
         if not current_user.is_authenticated:
             return redirect(url_for('auth.login'))
-        logging.info(f'User {current_user.id} is attempting to log out')
+        id = current_user.id
+        logging.info(f'User {id} is attempting to log out')
         logout_user()
-        # TODO: In CW2, change this to redirect to index page and flash message saying logged out successfully
-        logging.info(f'User {current_user.id} logged out')
-        return redirect(url_for('auth.login'))
+        logging.info(f'User {id} logged out')
+        flash('You have been logged out successfully', 'success')
+        return redirect(url_for('general.get_index'))
 
     except Exception as e:
         logging.error(f'Error occurred while logging out user {current_user.id}: {e}')
-        flash('An error occurred while logging out. Please try again.')
+        flash('An error occurred while logging out. Please try again.', 'warning')
         return redirect(url_for('general.get_profile'))  # Redirect to profile page if error occurs
 
 
@@ -137,10 +138,11 @@ def delete_user():
 
         logout_user()
         logging.info(f'User {user_id} logged out after successfully deleting account')
+        flash('Your account has been deleted successfully', 'success')
         return redirect(url_for('general.get_index'))
 
     except exc.SQLAlchemyError as e:
         db.session.rollback()
         logging.error(f'Error occurred while deleting user {current_user.id}: {e}')
-        flash('An error occurred while deleting your account. Please try again.')
+        flash('An error occurred while deleting your account. Please try again.', 'error')
         return redirect(url_for('general.get_profile'))  # Redirect to profile page if error occurs

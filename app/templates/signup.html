@@ -1,13 +1,37 @@
-<div class="signup-page">
-  <div class="form">
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card shadow-2-strong container-xl" style="border-radius: 1rem;">
+  <div class="card-body p-5">
+    <h3 class="mb-5">{% block title %} Sign Up {% endblock %}</h3>
     <form class="signup-form" method="post">
-      <input type="text" name="first_name" placeholder="First Name"/>
-      <input type="text" name="last_name" placeholder="Last Name"/>
-      <input type="email" name="email_address" placeholder="email address"/>
-      <input type="text" name="occupation" placeholder="occupation"/>
-      <input type="password" name="password" placeholder="password"/>
-      <input type="submit" value="Sign Up">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="first_name">First Name</label>
+          <input type="text" name="first_name" placeholder="First Name" class="form-control" id="first_name" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="last_name">Last Name</label>
+          <input type="text" name="last_name" placeholder="Last Name" class="form-control" id="last_name" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="email">Email Address</label>
+            <input type="email" name="email_address" placeholder="Email Address" class="form-control" id="email" placeholder="Email Address" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="occupation">Occupation</label>
+          <input type="text" name="occupation" class="form-control" id="occupation" placeholder="Occupation">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="password">Password</label>
+          <input type="password" name="password" placeholder="Password" class="form-control" id="password" placeholder="Password" required>
+        </div>
+      </div>
+      <button class="btn btn-primary mb-3" style="background-color: #073253;" type="submit">Sign Up</button>
+      <p class="message mb-3">Already registered? <a href="{{ url_for('auth.login') }}">Log In</a></p>
     </form>
   </div>
 </div>
 
+{% endblock %} 

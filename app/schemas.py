@@ -1,11 +1,11 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from .models import Area, Hours, TravelMethod, TravelDistance, User, Map
+from .models import LocalAuthority, Hours, TravelMethod, TravelDistance, User, Map
 from .extensions import db
 
 
-class AreaSchema(SQLAlchemyAutoSchema):
+class LocalAuthoritySchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = Area
+        model = LocalAuthority
         load_instance = True
 
 

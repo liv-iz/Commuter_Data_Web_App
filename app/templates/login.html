@@ -1,31 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="login-page">
-  <div class="form">
+
+<div class="card shadow-2-strong container-xl rounded-4">
+  <div class="card-body p-5">
+    <h3 class="mb-5">{% block title %} Log In {% endblock %}</h3>
     <form class="login-form" method="POST">
-      <input type="email" name="email_address" placeholder="email address"/>
-      <input type="password" name= "password" placeholder="password"/>
-      <input type="submit" value="Log in"/>
-      <input type="checkbox" name="remember" id="remember">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="email">Email Address</label>
+            <input type="email" name="email_address" placeholder="Email Address" class="form-control" id="email" placeholder="Email Address" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="password">Password</label>
+          <input type="password" name="password" placeholder="Password" class="form-control" id="password" placeholder="Password" required>
+        </div>
+      </div>
+      <div>
+      <input class="checkbox mb-3" type="checkbox" name="remember" id="remember">
       <label for="remember">Remember me?</label>
+      </div>
+      <button class="btn btn-primary mb-3" style="background-color: #073253;" type="submit">Log In</button>
+      <p class="message mb-3">Not registered? <a href="{{ url_for('auth.sign_up') }}">Create an account</a></p>
     </form>
-    <p class="message">Not registered? <a href="{{ url_for('auth.sign_up') }}">Create an account</a></p>
   </div>
 </div>
 
-{% with messages = get_flashed_messages() %}
-   {% if messages %}
-      {% for message in messages %}
-         {{ message }}
-      {% endfor %}
-   {% endif %}
-{% endwith %}
-
-    <div class="d-flex">
-        <h1>{% block title %} Index {% endblock %}</h1>
-        <h1>Hello World!</h1>
-        <h2>Welcome to FlaskApp!</h2>
-        <h3>{{ utc_dt }}</h3>
-    </div>
 {% endblock %}  

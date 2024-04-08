@@ -1,23 +1,47 @@
-<span> Hi {{ current_user.first_name }} {{ current_user.last_name }}!</span>
+{% extends 'base.html' %}
 
-<button id="deleteButton" type="button">DELETE ACCOUNT</button>
+{% block content %}
+<div class="card shadow-2-strong container-xl rounded-4">
+    <div class="card-body p-5">
+      <h3 class="mb-5">{% block title %} Profile {% endblock %}</h3>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="first_name">First Name</label>
+            <p class="text-muted mb-0">{{ current_user.first_name}}</p>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="last_name">Last Name</label>
+            <p class="text-muted mb-0">{{ current_user.last_name}}</p>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="first_name">Email Address</label>
+            <p class="text-muted mb-0">{{ current_user.email_address}}</p>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="first_name">Occupation</label>
+            <p class="text-muted mb-0">{{ current_user.occupation}}</p>
+        </div>
+        </div>
+        <button id="deleteButton" type="button" class="btn btn-danger">DELETE ACCOUNT</button>
 
-<script>
-document.getElementById('deleteButton').addEventListener('click', function() {
-    fetch('/auth/delete-user', {
-        method: 'DELETE',
-    })
-    .then(response => {
-        if (response.redirected) {
-            window.location.href = response.url;
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
-</script>
+        <script>
+        document.getElementById('deleteButton').addEventListener('click', function() {
+            fetch('/auth/delete-user', {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+        </script>
+    </div>
+  </div>
 
-
+  {% endblock %}
 <!-- This section contains JavaScript code that is used for a button. Instead of using a form, this JavaScript code handles the button functionality. -->
 <!-- The JavaScript code listens for a click event on the button with the id deleteButton. When the button is clicked, the code sends a DELETE request to the /auth/delete-user route. Refered to this https://harrycresswell.com/writing/practical-javascript-click-to-delete/ -->

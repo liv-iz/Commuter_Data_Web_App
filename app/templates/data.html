@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">{% block title %}Data{% endblock %}</h1>
+    <p class="lead">Learn more about the data used in the Flask App.</p>
+</div>
+
+<div class="container">
+    <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Data Source</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title"></h1>
+                <a href="https://data.london.gov.uk/dataset/2021-census-lsoa-labour-market" target="_blank">
+                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">2021 census lsoa labour market</button>
+                </a>
+            </div>
+        </div>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">Cleaned Data</h4>
+            </div>
+            <div class="card-body">
+                <a href="/static/data/dataset_prepared.xlsx" download>
+                    <button type="button" class="btn btn-lg btn-block btn-primary">Download Excel File</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
