@@ -12,6 +12,7 @@ Please refer to https://python-poetry.org/docs/basic-usage/ on how to use poetry
 
 To run the app please first load the data into the database using the data_migration.py file in the scripts folder. After that, you can F5 to run the app or run "poetry run pytest" to run the tests. 
 
+If running from the zip file in moodle, the db instance should be there already.
 
 
 Evidence of tests passing:
