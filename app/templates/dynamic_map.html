@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">{% block title %}Dynamic Map {% endblock %}</h1>
+    <p class="lead">Make your own map and save it. You can access your maps through the "My Maps" tab above.</p>
+</div>
+<div id="chart" style="width:100%; height:400px;"></div>
+
+<div class="container-fluid p-5">
+    <div class="row">
+        <div class="col-12 col-xl-3 gy-4">
+            <h3 class="mb-4">Year</h3>
+            <div class="d-flex">
+                <button class="btn btn-secondary me-2" onclick="setYear('2011')">2011</button>
+                <button class="btn btn-secondary" onclick="setYear('2021')">2021</button>
+            </div>
+        </div>
+        <div class="col-12 col-xl-9 gy-4">
+            <h3>Data Point</h3>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Travel Distance
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'less_than_2', 'Less Than 2km')">Less than 2km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_3_and_5', '3km To 5km')">3km to 5km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_6_and_10', '6km To 10km')">6km to 10km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_11_and_20', '11km To 20km')">11km to 20km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_21_and_30', '21km To 30km')">21km to 30km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_31_and_40', '31km To 40km')">31km to 40km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'between_41_and_60', '41km To 60km')">41km to 60km</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_distance', 'Travel Distance', 'more_than_60', 'More Than 60km')">More than 60km</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            Travel Method
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'work_from_home', 'Work From Home')">Work From Home</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'underground', 'Underground')">Underground</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'train', 'Train')">Train</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'bus', 'Bus')">Bus</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'taxi', 'Taxi')">Taxi</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'motorcycle', 'Motorcycle')">Motorcycle</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'car_driver', 'Car Driver')">Car Driver</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'car_passenger', 'Car Passenger')">Car Passenger</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'bicycle', 'Bicycle')">Bicycle</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'walk', 'Walk')">Walk</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('travel_method', 'Travel Method', 'other', 'Other')">Other</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                            Hours Worked
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <button class="btn btn-secondary" onclick="setDataSource('hours_worked', 'Hours Worked', 'less_than_15', 'Less Than 15')">Less Than 15</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('hours_worked', 'Hours Worked', 'between_16_and_30', '16 to 30')">16 to 30</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('hours_worked', 'Hours Worked', 'between_31_and_48', '31 to 48')">31 to 48</button>
+                            <button class="btn btn-secondary" onclick="setDataSource('hours_worked', 'Hours Worked', 'more_than_48', 'More than 48')">More than 48</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-xl-3 gy-4">
+            <h3>Colour</h3>
+            <div class="d-flex">
+                <label for="map_min_colour">Min Colour</label>
+                <input type="color" class="ms-2" id="map_min_colour" oninput="setMinColour(this.value)">
+                <label for="map_max_colour" class="ms-2">Max Colour</label>
+                <input type="color" class="ms-2" id="map_max_colour" oninput="setMaxColour(this.value)">
+            </div>
+        </div>
+        <div class="col-12 col-xl-9 gy-4">
+            <div class="d-flex">
+                <input type="text" placeholder="Untitled Map" class="form-control" id="map_name">
+                <button class="btn btn-primary ms-2" onclick="saveMap()">Save Map</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/Highcharts-Maps-11.4.0/code/highmaps.js"></script>
+<script src="/static/Highcharts-Maps-11.4.0/code/modules/accessibility.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let dataSource = urlParams.get('dataSource') || 'travel_distance';
+    let dataSourceLabel = urlParams.get('dataSourceLabel') || 'Travel Distance';
+    let attribute = urlParams.get('attribute') || 'less_than_2';
+    let attributeLabel = urlParams.get('attributeLabel') || 'Less Than 2km';
+    let year = urlParams.get('year') || '2021';
+    let minColour = urlParams.get('minColour') || 'FFEA00';
+    let maxColour = urlParams.get('maxColour') || 'EE4B2B';
+    
+    function setDataSource(newDatasource, newDataSourceLabel, newAttribute, newAttributeLabel) {
+        dataSource = newDatasource;
+        dataSourceLabel = newDataSourceLabel;
+        attribute = newAttribute;
+        attributeLabel = newAttributeLabel;
+        updateMap();
+    }
+
+    function setYear(newYear) {
+        year = newYear;
+        updateMap();
+    }
+
+    function setMinColour(newMinColour) {
+        minColour = newMinColour.substring(1);
+        updateMap();
+    }
+
+    function setMaxColour(newMaxColour) {
+        maxColour = newMaxColour.substring(1);
+        updateMap();
+    }
+
+    const mapData = fetch('/static/maps/local-authority-geometries.geojson')
+        .then(response => response.json())
+        .catch(error => console.error('Error: ', error));
+
+    async function updateMap() {
+        let data = await fetch(`/api/${dataSource}/${year}?column=${attribute}`)
+            .then(response => response.json())
+            .then(data => data.results)
+            .catch(error => console.error('Error:', error));
+
+        if (dataSource === 'travel_distance') {
+            data = data.map(r => [ r[0], ( (parseFloat(r[1]) / parseFloat(r[2])) * 100 ).toFixed(2) ]);
+        }
+
+        let minValue = parseFloat(data[0][1]);
+        let maxValue = minValue;
+        for (let i = 1; i < data.length; i++) {
+            const parsedValue = parseFloat(data[i][1]);
+            if (parsedValue < minValue) minValue = parsedValue;
+            if (parsedValue > maxValue) maxValue = parsedValue;
+            data[i][1] = parsedValue;
+        }
+
+        Highcharts.mapChart('chart', {
+            chart: {
+                map: await mapData
+            },
+
+            title: {
+                text: `${dataSourceLabel} - ${attributeLabel} - ${year}`
+            },
+
+            accessibility: {
+                typeDescription: 'Map of the UK'
+            },
+
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+            
+            colorAxis: {
+                min: minValue,
+                max: maxValue,
+                type: 'linear',
+                minColor: '#' + minColour,
+                maxColor: '#' + maxColour
+            },
+
+            series: [{
+                data: data,
+                keys: ['local_authority_code', 'value'],
+                joinBy: 'local_authority_code',
+                name: attributeLabel,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.properties.local_authority_name}'
+                }
+            }]
+        });
+    };
+
+    function saveMap() {
+        fetch('/api/maps', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: document.getElementById('map_name').value,
+                dataSource,
+                dataSourceLabel,
+                attribute,
+                attributeLabel,
+                year,
+                minColour,
+                maxColour
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                window.location.href = `/dynamic_map?dataSource=${dataSource}&dataSourceLabel=${dataSourceLabel}&attribute=${attribute}&attributeLabel=${attributeLabel}&year=${year}&minColour=${minColour}&maxColour=${maxColour}`
+            }
+        }).error(console.error);
+    }
+
+    updateMap();
+</script>
+
+{% endblock %}

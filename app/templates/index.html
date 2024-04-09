@@ -1,10 +1,270 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="d-flex">
-        <h1>{% block title %} Index {% endblock %}</h1>
-        <h1>Hello World!</h1>
-        <h2>Welcome to FlaskApp!</h2>
-        <h3>{{ utc_dt }}</h3>
+<script src="/static/Highcharts-Maps-11.4.0/code/highmaps.js"></script>
+<script src="/static/Highcharts-Maps-11.4.0/code/modules/accessibility.js"></script>
+<div class="dashboard-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">{% block title %} Dashboard {% endblock %}</h1>
+    <p class="lead">This is a flask app to display data about employed residents from 2011 and 2021. Check the "Data" tab to learn more about where the data comes from and download a table of the raw cleaned data. Below you can check out some cool graphs or head over to "Create Map"  to make and then save your own.</p>
+</div>
+<div class="container">
+    <h1>Employed Residents</h1>
+    <div class="row">
+        <div class="col-12 col-xxl-6">
+            <div id="chart" style="width:100%; height:400px;"></div>
+        </div>
+        <div class="col-12 col-xxl-6">
+            <div id="bar_chart"></div>
+        </div>
     </div>
-{% endblock %}  
+    <script>
+        (async () => {
+            const employmentData = await fetch('/api/employed_residents_2021')
+                .then(response => response.json())
+                .then(data => data.data)
+                .catch(error => console.error('Error:', error));
+
+            const mapData = await fetch('/static/maps/local-authority-geometries.geojson')
+                .then(response => response.json())
+                .catch(error => console.error('Error:', error));
+
+            Highcharts.mapChart('chart', {
+                chart: {
+                    map: mapData
+                },
+
+                title: {
+                    text: 'Employed Residents 2021'
+                },
+
+                accessibility: {
+                    typeDescription: 'Map of the UK'
+                },
+
+                mapNavigation: {
+                    enabled: true,
+                    buttonOptions: {
+                        verticalAlign: 'bottom'
+                    }
+                },
+
+                colorAxis: {
+                    min: 5000,
+                    max: 200000,
+                    type: 'linear',
+                    minColor: '#FFEA00',
+                    maxColor: '#EE4B2B',
+                    stops: [
+                        [0, '#FFEA00'],
+                        [0.5, '#FFAC1C'],
+                        [1, '#EE4B2B']
+                    ]
+                },
+
+                series: [{
+                    data: employmentData,
+                    keys: ['local_authority_code', 'value'],
+                    joinBy: 'local_authority_code',
+                    name: 'Employed Residents',
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.properties.local_authority_name}'
+                    }
+                }]
+            });
+            Highcharts.chart('bar_chart', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Number of Residents per Local Authority 2021',
+                    align: 'left'
+                },
+                xAxis: {
+                    categories: employmentData.map(x => mapData.features.find(feature => feature.properties.local_authority_code == x[0]).properties.local_authority_name),
+                    crosshair: true,
+                    accessibility: {
+                        description: 'Regions'
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Employed Residents'
+                    }
+                },
+                tooltip: {
+                    valueSuffix: ' people'
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [
+                    {
+                        name: 'Employed Residents 2021',
+                        data: employmentData.map(x => parseInt(x[1]))
+                    }
+                ]
+            });
+        })();
+    </script>
+</div>
+<div class="container">
+    <h1>Distance Travelled</h1>
+    <div class="tab">
+        <button class="tablinks" onclick="openMap(event, '2011')" id="defaultOpen">2011</button>
+        <button class="tablinks" onclick="openMap(event, '2021')">2021</button>
+    </div>
+    <div id="travel_distance_2011" class="tabcontent" role="tabpanel" aria-labelledby="2011-distance-tab">
+        <!-- <div class="tab-pane fade show active"> -->
+            <div id="distance_2011" style="width:100%; height:400px;"></div>
+            <button class="btn btn-info mb-3" onclick="updateMap('less_than_2', 2011)">Less than 2km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_3_and_5', 2011)">3km to 5km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_6_and_10', 2011)">6km to 10km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_11_and_20', 2011)">11km to 20km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_21_and_30', 2011)">21km to 30km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_31_and_40', 2011)">31km to 40km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_41_and_60', 2011)">41km to 60km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('more_than_60', 2011)">More than 60km</button>
+        <!-- </div> -->
+    </div>
+    <div id="travel_distance_2021" class="tabcontent" role="tabpanel" aria-labelledby="2021-distance-tab">
+        <!-- <div class="tab-pane fade"> -->
+            <div id="distance_2021" style="width:100%; height:400px;"></div>
+            <button class="btn btn-info mb-3" onclick="updateMap('less_than_2', 2021)">Less than 2km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_3_and_5', 2021)">3km to 5km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_6_and_10', 2021)">6km to 10km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_11_and_20', 2021)">11km to 20km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_21_and_30', 2021)">21km to 30km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('between_31_and_40', 2021)">31km to 40km</button>
+            <button class="btn btn-info mb-3" onclick="updateMap('between_41_and_60', 2021)">41km to 60km</button>
+            <button class="btn btn-primary mb-3" onclick="updateMap('more_than_60', 2021)">More than 60km</button>
+        <!-- </div> -->
+    </div>
+    <style>
+         /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Style the buttons that are used to open the tab content */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        } 
+    </style>
+    <script>
+        const mapData = fetch('/static/maps/local-authority-geometries.geojson')
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error));
+
+            // From: https://www.w3schools.com/howto/howto_js_tabs.asp
+            function openMap(evt, year) {
+                // Declare all variables
+                var i, tabcontent, tablinks;
+
+                // Get all elements with class="tabcontent" and hide them
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Get all elements with class="tablinks" and remove the class "active"
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                document.getElementById(`travel_distance_${year}`).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+
+        async function updateMap(column, year) {
+            console.log("hi");
+            const travelData = await fetch(`/api/travel_distance/${year}?column=${column}`)
+                .then(response => response.json())
+                .catch(error => console.error('Error:', error));
+            const traveldistanceData2011 = travelData.results.map(r => [r[0], parseFloat(((parseFloat(r[1]) / parseFloat(r[2])) * 100).toFixed(2)) ]);
+            Highcharts.mapChart(`distance_${year}`, {
+                chart: {
+                    map: await mapData
+                },
+
+                title: {
+                    text: `Travel Distance ${year} % of employed residents`
+                },
+
+                accessibility: {
+                    typeDescription: 'Map of the UK'
+                },
+
+                mapNavigation: {
+                    enabled: true,
+                    buttonOptions: {
+                        verticalAlign: 'bottom'
+                    }
+                },
+                
+                colorAxis: {
+                    min: traveldistanceData2011.reduce((min, p) => p[1] < min ? p[1] : min, traveldistanceData2011[0][1]),
+                    max: traveldistanceData2011.reduce((max, p) => p[1] > max ? p[1] : max, traveldistanceData2011[0][1]),
+                    type: 'linear',
+                    minColor: '#FFEA00',
+                    maxColor: '#EE4B2B',
+                    stops: [
+                        [0, '#FFEA00'],
+                        [0.5, '#FFAC1C'],
+                        [1, '#EE4B2B']
+                    ]
+                },
+
+                series: [{
+                    data: traveldistanceData2011,
+                    keys: ['local_authority_code', 'value'],
+                    joinBy: 'local_authority_code',
+                    name: column,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.properties.local_authority_name}'
+                    }
+                }]
+            });
+        };
+
+        document.getElementById("defaultOpen").click();
+
+        // Update map on loading
+        updateMap('less_than_2', 2011);
+        updateMap('less_than_2', 2021);
+    </script>
+</div>
+{% endblock %}

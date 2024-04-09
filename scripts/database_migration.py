@@ -25,6 +25,11 @@ with pd.ExcelFile(data_file_path) as file:
 print("Done :)")
 
 for df_name, df in data_dfs.items():
+    if 'local_authority_name' in df.columns:
+        df.drop('local_authority_name', axis=1, inplace=True)
+        df.drop('geometry', axis=1, inplace=True)
+
+for df_name, df in data_dfs.items():
     df['census_year'] = 2011 if df_name in ['hours_worked_2011',
                                             'travel_method_2011', 'travel_distance_2011'] else 2021
 
