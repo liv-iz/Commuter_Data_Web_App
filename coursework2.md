@@ -11,3 +11,9 @@ Moreover, to make the frontend load faster, the geometry data is statically serv
 Please refer to https://python-poetry.org/docs/basic-usage/ on how to use poetry for an existing project.
 
 To run the app please first load the data into the database using the data_migration.py file in the scripts folder. After that, you can F5 to run the app or run "poetry run pytest" to run the tests. 
+
+
+
+Evidence of tests passing:
+
+![alt text](image.png)
