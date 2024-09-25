@@ -1,2 +1,2 @@
-# COMP0034 2023/24 Coursework 2 starter repostitory
-Edit this file as needed.
+# Web App on London Commuter Data
+Flask App developed using Python that displays graphs for commuter data using High Charts and JavaScript.
